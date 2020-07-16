@@ -1,0 +1,5 @@
+{"level":"info","msg":"init come on","time":"2020-04-27T23:19:23+08:00"}
+
+{"level":"info","msg":"Current location is /root/mnt/redis1","time":"2020-04-27T23:19:23+08:00"}
+
+{"level":"error","msg":"Exec loop path error exec: \"\": executable file not found in $PATH","time":"2020-04-27T23:19:23+08:00"}

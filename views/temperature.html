@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN"  style="height: 100%">
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body style="height: 90%; margin: 20px">
+<div id="container" style="height: 90%" class="my-4 w-100"></div>
+<div class="table-responsive" style="margin: auto auto; width: 85%">
+    <table class="table table-striped table-sm">
+        <thead>
+        <tr>
+            <th>树莓派温度传感器数据：</th>
+        </tr>
+        </thead>
+        <tbody id="inf">
+        <tr>
+            <td>连接服务器成功！</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<script src="https://cdn.bootcss.com/echarts/4.2.1-rc1/echarts.min.js"></script>
+<script src="lib/layui/layui.js" charset="utf-8"></script>
+<script type="text/javascript" src="javascripts/xadmin.js"></script>
+<script type="text/javascript">
+    var myChart = echarts.init(document.getElementById("container"));
+    var template = ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',];
+    var app = {};
+    option = null;
+    option = {
+        title: {
+            text: '传感器温度检测',
+            subtext: '树莓派',
+            left: 'center'
+        },
+        tooltip: {
+            trigger: 'axis'
+        },
+        legend: {
+            top: 10,
+            left: 40,
+            data: ['温度']
+        },
+        toolbox: {
+            show: true,
+            feature: {
+                // dataZoom: {
+                //     yAxisIndex: 'none'
+                // },
+                dataView: {readOnly: false},
+                magicType: {type: ['line', 'bar']},
+                // restore: {},
+                saveAsImage: {}
+            }
+        },
+        xAxis: {
+            type: 'category',
+            boundaryGap: false,
+            data: [20, '', '', '', '', 15, '', '', '', '', 10, '', '', '', '', 5, '', '', '', '', 0]
+        },
+        yAxis: {
+            type: 'value',
+            max: 35,
+            min: 15,
+            splitNumber: 5,
+            axisLabel: {
+                formatter: '{value} °C'
+            }
+        },
+        series: [
+            {
+                name: '温度',
+                type: 'line',
+                data: template,
+                markPoint: {
+                    data: [
+                        {type: 'max', name: '最大值'},
+                        {type: 'min', name: '最小值'}
+                    ]
+                },
+                markLine: {
+                    data: [
+                        {type: 'average', name: '平均值'}
+                    ]
+                }
+            }
+        ]
+    };
+    myChart.setOption(option);
+    setInterval(function () {
+        var num = Math.floor(Math.random() * 2 + 26);
+        template.push(num);
+        var newTr = document.getElementById("inf").firstElementChild.cloneNode(true);
+        var date = new Date();
+        newTr.children[0].innerHTML = date.toLocaleTimeString()+"&nbsp;&nbsp;&nbsp;"+"传感器温度为:"+num+"°C&nbsp;&nbsp;&nbsp;"+"上传服务器成功！";
+        document.getElementById("inf").appendChild(newTr);
+
+
+        if (template.length >= 20) {
+            template.shift();
+        }
+        myChart.setOption({
+            series: [{
+                data: template
+            }]
+        })
+    }, 1000);
+    // if (option && typeof option === "object") {
+    //     myChart.setOption(option, true);
+    // }
+</script>
+</body>
+</html>

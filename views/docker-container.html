@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+<head>
+    <meta charset="UTF-8">
+    <title>欢迎页面-X-admin2.2</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+    <link rel="stylesheet" href="css/font.css">
+    <link rel="stylesheet" href="css/xadmin.css">
+    <script src="lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="javascripts/xadmin.js"></script>
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+
+        <div class="layui-col-sm12 layui-col-md6">
+            <div class="layui-card">
+                <!--                        <div class="layui-card-header">容器CPU占用率</div>-->
+                <div class="layui-card-body" style="min-height: 280px;">
+                    <div id="main1" class="layui-col-sm12" style="height: 300px;"></div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-sm12 layui-col-md6">
+            <div class="layui-card">
+                <!--                        <div class="layui-card-header">最新一周PV/UV量</div>-->
+                <div class="layui-card-body" style="min-height: 280px;">
+                    <div id="main2" class="layui-col-sm12" style="height: 300px;"></div>
+
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-sm12 layui-col-md6">
+            <div class="layui-card">
+                <!--                        <div class="layui-card-header">用户来源</div>-->
+                <div class="layui-card-body" style="min-height: 280px;">
+                    <div id="main3" class="layui-col-sm12" style="height: 300px;"></div>
+
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-sm12 layui-col-md6">
+            <div class="layui-card">
+                <!--                        <div class="layui-card-header">硬盘使用量</div>-->
+                <div class="layui-card-body" style="min-height: 280px;">
+                    <div id="main4" class="layui-col-sm12" style="height: 300px;"></div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<script src="https://cdn.bootcss.com/echarts/4.2.1-rc1/echarts.min.js"></script>
+<script type="text/javascript">
+
+    var i = 1;
+    function time(){
+        i=i+0.2;
+        console.log(i);
+        if(i>=2.3)return;
+        setTimeout(time,1000);
+    }
+    time();
+
+    // 图1
+    var myChart = echarts.init(document.getElementById('main1'));
+    var cpudata = ['','','','','','','','','','','','','','','','','','','','','','','',];
+    // 指定图表的配置项和数据
+    var option = {
+        animation:false,
+        title: {
+            text: '容器CPU占用率',
+            left:'center',
+            subtext:'单位：%',
+            color:'#CD5C5C'
+        },
+        // 改
+        tooltip: {
+            // trigger: 'axis'
+        },
+        //改
+        legend: {
+            left:10,
+            data:[{name:'使用率',
+                textStyle:{
+                    color:'#CD5C5C'
+                }
+            }]
+        },
+        toolbox: {
+            show: true,
+            feature: {
+                // dataZoom: {
+                //     yAxisIndex: 'none'
+                // },
+                dataView: {readOnly: false},
+                magicType: {type: ['line', 'bar']},
+                // restore: {},
+                saveAsImage: {}
+            }
+        },
+        xAxis: {
+            name:'/S',
+            nameLocation:'end',
+            boundaryGap:false,
+            data:[20,'','','','',15,'','','','',10,'','','','',5,'','','','',0]
+        },
+        yAxis: {
+            type: 'value',
+            axisLabel:{
+                show: true,
+                interval: 'auto',
+                formatter: '{value} %'
+            }
+        },
+
+        series: [{
+            // 改
+            name:'使用率',
+            type:'line',
+            // symbol:'none',
+            stack:'a',
+            areaStyle:{
+                // normal:{color:'#8cd5c2'}
+            },
+            itemStyle: {
+                normal: {
+                    // color: '#8cd5c2', //改变折线点的颜色
+                    lineStyle: {
+                        // color: '#8cd5c2' //改变折线颜色
+                    },
+                }
+            },
+            data:cpudata
+        }]
+    };
+    // 使用刚指定的配置项和数据显示图表。
+    myChart.setOption(option);
+    setInterval(function () {
+        cpudata.push((Math.floor(Math.random()*(5))+20)/i);
+        if(cpudata.length>=20){
+            cpudata.shift();
+        }
+        myChart.setOption({
+            series: [{
+                data:cpudata
+            }]
+        })
+    },1000);
+
+    // 图2
+    var myChart1 = echarts.init(document.getElementById('main2'));
+    var ramdata = ['','','','','','','','','','','','','','','','','','','','','','','',];
+
+    var option = {
+        animation:false,
+        title: {
+            text: '容器RAM占用率',
+            left:'center',
+            subtext:'单位：%',
+            color:'#696969'
+        },
+        // 改
+        tooltip: {
+            // trigger: 'axis'
+        },
+        //改
+        legend: {
+            left:10,
+            data:[{name:'使用率',
+                textStyle:{
+                    color:'#696969'
+                }
+            }]
+        },
+        toolbox: {
+            show: true,
+            feature: {
+                // dataZoom: {
+                //     yAxisIndex: 'none'
+                // },
+                dataView: {readOnly: false},
+                magicType: {type: ['line', 'bar']},
+                // restore: {},
+                saveAsImage: {}
+            }
+        },
+        xAxis: {
+            name:'/S',
+            nameLocation:'end',
+            boundaryGap:false,
+            data:[20,'','','','',15,'','','','',10,'','','','',5,'','','','',0]
+        },
+        yAxis: {
+            type: 'value',
+            axisLabel:{
+                show: true,
+                interval: 'auto',
+                formatter: '{value} %'
+            }
+        },
+        series: [{
+            // 改
+            name:'使用率',
+            type:'line',
+            // symbol:'none',
+            stack:'a',
+            areaStyle:{
+                normal:{color:'#696969'}
+            },
+            itemStyle: {
+                normal: {
+                    color: '#696969', //改变折线点的颜色
+                    lineStyle: {
+                        color: '#696969' //改变折线颜色
+                    },
+                }
+            },
+            data:ramdata
+        }]
+    };
+    // 使用刚指定的配置项和数据显示图表。
+    myChart1.setOption(option);
+    setInterval(function () {
+        ramdata.push(Math.floor(Math.random()*(2))+10);
+        if(ramdata.length>=20){
+            ramdata.shift();
+        }
+        myChart1.setOption({
+            series: [{
+                data:ramdata
+            }]
+        })
+    },1000)
+
+    // 图三
+    var myChart2 = echarts.init(document.getElementById('main3'));
+    var Network = ['','','','','','','','','','','','','','','','','','','','','','','',];
+
+    var option = {
+        animation:false,
+        title: {
+            text: 'NetWork',
+            left:'center',
+            subtext:'单位：%',
+            color:'#5F9EA0'
+        },
+        // 改
+        tooltip: {
+            // trigger: 'axis'
+        },
+        //改
+        legend: {
+            left:10,
+            data:[{name:'使用率',
+                textStyle:{
+                    color:'#5F9EA0'
+                }
+            }]
+        },
+        xAxis: {
+            name:'/S',
+            nameLocation:'end',
+            boundaryGap:false,
+            data:[20,'','','','',15,'','','','',10,'','','','',5,'','','','',0]
+        },
+        yAxis: {
+            type: 'value',
+            max: 100,  //设置最大值
+            min: 0,                                 //最小值
+            splitNumber: 6,
+            axisLabel:{
+                show: true,
+                interval: 'auto',
+                formatter: '{value} %'
+            }
+        },
+        series: [{
+            // 改
+            name:'使用率',
+            type:'line',
+            // symbol:'none',
+            stack:'a',
+            areaStyle:{
+                normal:{color:'#5F9EA0'}
+            },
+            itemStyle: {
+                normal: {
+                    color: '#5F9EA0', //改变折线点的颜色
+                    lineStyle: {
+                        color: '#5F9EA0' //改变折线颜色
+                    },
+                }
+            },
+            data:Network
+        }]
+    };
+    // 使用刚指定的配置项和数据显示图表。
+    myChart2.setOption(option);
+    setInterval(function () {
+        Network.push(Math.floor(Math.random() * (1)));
+        if(Network.length>=20){
+            Network.shift();
+        }
+        myChart2.setOption({
+            series: [{
+                data:Network
+            }]
+        })
+    },1000)
+
+
+    // 图4
+    var myChart3 = echarts.init(document.getElementById('main4'));
+    var Storage = ['','','','','','','','','','','','','','','','','','','','','','','',];
+
+    var option = {
+        animation:false,
+        title: {
+            text: 'Storage',
+            left:'center',
+            subtext:'单位：%',
+            // textStyle:{
+            //     color:'#90EE90'
+            // }
+        },
+        // 改
+        tooltip: {
+            // trigger: 'axis'
+        },
+        //改
+        legend: {
+            left:10,
+            data:[{name:'使用率',
+                textStyle:{
+                    color:'#CD853F'
+                }
+            }]
+        },
+        xAxis: {
+            name:'/S',
+            nameLocation:'end',
+            boundaryGap:false,
+            data:[20,'','','','',15,'','','','',10,'','','','',5,'','','','',0]
+        },
+        yAxis: {
+            type: 'value',
+            max: 100,  //设置最大值
+            min: 0,                                 //最小值
+            splitNumber: 6,
+            axisLabel:{
+                show: true,
+                interval: 'auto',
+                formatter: '{value} %'
+            }
+        },
+        series: [{
+            // 改
+            name:'使用率',
+            type:'line',
+            // symbol:'none',
+            stack:'a',
+            areaStyle:{
+                normal:{color:'#CD853F'}
+            },
+            itemStyle: {
+                normal: {
+                    color: '#CD853F', //改变折线点的颜色
+                    lineStyle: {
+                        color: '#CD853F' //改变折线颜色
+                    },
+                }
+            },
+            data:Storage
+        }]
+    };
+    // 使用刚指定的配置项和数据显示图表。
+    myChart3.setOption(option);
+    setInterval(function () {
+        Storage.push(Math.floor(Math.random() * (2)));
+        if(Storage.length>=20){
+            Storage.shift();
+        }
+        myChart3.setOption({
+            series: [{
+                data:Storage
+            }]
+        })
+    },1000)
+</script>
+<script>
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+</body>
+</html>
